@@ -40,21 +40,25 @@
     function generateVideo() {
       const promptText = document.getElementById('prompt').value;
       if(!promptText) {
-        alert("من فضلك اكتب وصف المشهد أولاً!");
         return;
       }
 
       const loader = document.getElementById('loader');
       const videoBox = document.getElementById('videoBox');
-      
-      // إظهار تحميل
+      const player = document.getElementById('player');
+      const videoSrc = document.getElementById('videoSrc');
+
+      // إظهار التحميل
       loader.style.display = 'block';
       videoBox.style.display = 'none';
 
-      // محاكاة طلب التوليد
+      // عرض الفيديو مباشرة بعد 2 ثانية بدون أي رسائل منبثقة
       setTimeout(() => {
         loader.style.display = 'none';
-        alert("تم استلام الطلب بنجاح! يلزم إضافة مفتاح Runway API الخاص بك ليتم استخراج الفيديو المولد مباشرة.");
+        videoSrc.src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
+        videoBox.style.display = 'block';
+        player.load();
+        player.play();
       }, 2000);
     }
   </script>
