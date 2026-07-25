@@ -23,7 +23,7 @@
     <h2>🎬 منصة AI Flix لتوليد الفيديو</h2>
     
     <label style="display:block; margin-bottom:8px;">اكتب وصف المشهد المطلوب:</label>
-    <textarea id="prompt" placeholder="مثال: مشهد سينمائي لليخت الفاخر وسط البحر عند الغروب..."></textarea>
+    <textarea id="prompt" placeholder="اكتب وصف المشهد هنا..."></textarea>
 
     <button onclick="generateVideo()">⚡ توليد المشهد الآن</button>
 
@@ -40,6 +40,7 @@
     function generateVideo() {
       const promptText = document.getElementById('prompt').value;
       if(!promptText) {
+        alert("من فضلك اكتب وصف المشهد أولاً!");
         return;
       }
 
@@ -48,11 +49,11 @@
       const player = document.getElementById('player');
       const videoSrc = document.getElementById('videoSrc');
 
-      // إظهار التحميل
+      // إظهار التحميل وإخفاء الفيديو القديم
       loader.style.display = 'block';
       videoBox.style.display = 'none';
 
-      // عرض الفيديو مباشرة بعد 2 ثانية بدون أي رسائل منبثقة
+      // محاكاة استجابة السيرفر وعرض فيديو معاينة شغال مباشرة
       setTimeout(() => {
         loader.style.display = 'none';
         videoSrc.src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
