@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Flix - منصة توليد الفيديوهات بالذكاء الاصطناعي</title>
+    <title>AI Flix - منصة توليد المحتوى بالذكاء الاصطناعي</title>
     <style>
         * {
             box-sizing: border-box;
@@ -40,44 +40,34 @@
             text-decoration: none;
             transition: 0.3s;
         }
-        .btn-primary:hover {
-            background-color: #0369a1;
-        }
         .hero {
             text-align: center;
-            padding: 60px 20px;
+            padding: 50px 20px;
             max-width: 800px;
             margin: 0 auto;
         }
         .hero h1 {
-            font-size: 40px;
-            margin-bottom: 20px;
+            font-size: 36px;
+            margin-bottom: 15px;
             color: #f8fafc;
         }
         .hero p {
             font-size: 18px;
             color: #94a3b8;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-        
-        /* Dashboard Section */
         .dashboard {
-            max-width: 900px;
-            margin: 20px auto 60px;
+            max-width: 800px;
+            margin: 0 auto 60px;
             background-color: #1e293b;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             border: 1px solid #334155;
         }
-        .dashboard h2 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #38bdf8;
-        }
         textarea {
             width: 100%;
-            height: 120px;
+            height: 100px;
             background-color: #0f172a;
             border: 1px solid #475569;
             border-radius: 8px;
@@ -90,20 +80,6 @@
         textarea:focus {
             outline: none;
             border-color: #38bdf8;
-        }
-        .options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        select {
-            background-color: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
         }
         .generate-btn {
             width: 100%;
@@ -120,38 +96,22 @@
         .generate-btn:hover {
             background-color: #059669;
         }
-        
-        /* Modal Popup */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
+        .result-box {
+            margin-top: 25px;
             text-align: center;
-            max-width: 400px;
-            border: 1px solid #38bdf8;
+            display: none;
         }
-        .modal-content h3 {
-            margin-bottom: 15px;
+        .result-box img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
-        .modal-content p {
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
-        .close-btn {
-            background: #ef4444;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #38bdf8;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -159,61 +119,56 @@
 
     <header>
         <div class="logo">🚀 AI Flix</div>
-        <button class="btn-primary" onclick="scrollToDashboard()">تجربة المنصة</button>
+        <button class="btn-primary" onclick="document.getElementById('prompt-input').focus()">تجربة الاستوديو</button>
     </header>
 
     <section class="hero">
-        <h1>أنشئ فيديوهاتك بالذكاء الاصطناعي في ثوانٍ 🎬</h1>
-        <p>تحويل النصوص إلى فيديوهات احترافية وإعلانات تجارية بدقة عالية وبكبسة زر واحدة.</p>
-        <button class="btn-primary" onclick="scrollToDashboard()">ابدأ التجربة المجانية الآن</button>
+        <h1>صمّم وجسّد أفكارك بالذكاء الاصطناعي مجاناً 🎬</h1>
+        <p>اكتب وصفك وشاهد محرك الذكاء الاصطناعي يحوله لنتيجة حقيقية أمامك في ثوانٍ!</p>
     </section>
 
-    <!-- Studio Dashboard -->
-    <section class="dashboard" id="studio">
-        <h2>استوديو التوليد السريع (تجريبي)</h2>
-        <p style="color: #94a3b8; margin-bottom: 15px;">أدخل وصف الفيديو الذي تريد إنشاءه باللغة العربية أو الإنجليزية:</p>
+    <section class="dashboard">
+        <h2 style="margin-bottom: 15px; color: #38bdf8;">استوديو التوليد المباشر</h2>
+        <textarea id="prompt-input" placeholder="اكتب وصفك هنا باللغة العربية أو الإنجليزية... (مثال: سيارة رياضية حمراء تجري في شوارع دبي ليلاً)"></textarea>
         
-        <textarea placeholder="مثال: قم بإنشاء فيديو إعلاني قصير لمطعم يقدّم وجبات سريعة بصوت حماسي وخلفية جبال..."></textarea>
-        
-        <div class="options">
-            <select>
-                <option>نمط الفيديو: سينمائي (Cinematic)</option>
-                <option>نمط الفيديو: كرتوني (3D Animation)</option>
-                <option>نمط الفيديو: واقعي (Realistic)</option>
-            </select>
-            <select>
-                <option>الصوت: أداء رجالي حماسي</option>
-                <option>الصوت: أداء نسائي هادئ</option>
-            </select>
-            <select>
-                <option>الأبعاد: 16:9 (يوتيوب/شاشة)</option>
-                <option>الأبعاد: 9:16 (تيك توك/ريلز)</option>
-            </select>
+        <button class="generate-btn" onclick="generateContent()">⚡ توليد الآن بالذكاء الاصطناعي</button>
+
+        <div class="loading" id="loading-spinner">
+            ⏳ جاري الاتصال بمحرك الذكاء الاصطناعي وتوليد تصميمك... انتظر لحظات!
         </div>
 
-        <button class="generate-btn" onclick="generateVideo()">⚡ توليد الفيديو الآن</button>
+        <div class="result-box" id="result-container">
+            <h3 style="margin-bottom: 15px; color: #10b981;">تم التوليد بنجاح! 🎉</h3>
+            <img id="generated-image" src="" alt="النتيجة">
+        </div>
     </section>
-
-    <!-- Popup Notice -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h3>جاري تجهيز محرك الذكاء الاصطناعي! 🚀</h3>
-            <p>شكراً لتجربتك منصة <b>AI Flix</b>. نضع حالياً اللمسات الأخيرة على السيرفرات الرسمية لإطلاق الخدمة للجمهور.</p>
-            <button class="close-btn" onclick="closeModal()">حسناً، فهمت</button>
-        </div>
-    </div>
 
     <script>
-        function scrollToDashboard() {
-            document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
-        }
+        function generateContent() {
+            const prompt = document.getElementById('prompt-input').value.trim();
+            const loading = document.getElementById('loading-spinner');
+            const resultBox = document.getElementById('result-container');
+            const imgElement = document.getElementById('generated-image');
 
-        function generateVideo() {
-            document.getElementById('modal').style.display = 'flex';
-        }
+            if (!prompt) {
+                alert('من فضلك اكتب وصفاً أو برومبت أولاً!');
+                return;
+            }
 
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
+            // إظهار تحذير التحميل
+            loading.style.display = 'block';
+            resultBox.style.display = 'none';
+
+            // تحويل النص لرابط Pollinations AI
+            const encodedPrompt = encodeURIComponent(prompt);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=800&height=450&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
+
+            // تحميل الصورة
+            imgElement.src = imageUrl;
+            imgElement.onload = function() {
+                loading.style.display = 'none';
+                resultBox.style.display = 'block';
+            };
         }
     </script>
 
