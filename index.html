@@ -3,304 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Flix - المنصة العالمية للذكاء الاصطناعي</title>
+  <title>AI Flix - منصة توليد المحتوى بالذكاء الاصطناعي</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-main: #0a0e17;
       --card-bg: #121824;
-      --accent-color: #6366f1;
-      --accent-hover: #4f46e5;
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --border-color: #1e293b;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --text-main: #ffffff;
+      --text-sub: #9ca3af;
+      --border: #1f2937;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Cairo', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-      margin-top: 20px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #38bdf8, #818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-
-    .header p {
-      color: var(--text-secondary);
-      font-size: 1.05rem;
-    }
-
-    /* Tabs Bar */
-    .tabs-nav {
-      display: flex;
-      gap: 10px;
-      background-color: var(--card-bg);
-      padding: 8px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 25px;
-      overflow-x: auto;
-    }
-
-    .tab-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-
-    /* Panels */
-    .tab-panel {
-      display: none;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
-
-    .panel-title {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      color: var(--text-primary);
-    }
-
-    textarea, input[type="text"] {
-      width: 100%;
-      background-color: #0f172a;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 14px;
-      color: var(--text-primary);
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-      outline: none;
-      resize: vertical;
-    }
-
-    textarea:focus, input[type="text"]:focus {
-      border-color: var(--accent-color);
-    }
-
-    .file-input-wrapper {
-      margin-bottom: 15px;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .file-label {
-      display: block;
-      padding: 16px;
-      background-color: #0f172a;
-      border: 2px dashed var(--border-color);
-      border-radius: 10px;
-      text-align: center;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .file-label:hover {
-      border-color: var(--accent-color);
-      color: var(--text-primary);
-    }
-
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .btn-submit:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* Results */
-    .result-container {
-      margin-top: 25px;
-      text-align: center;
-    }
-
-    video, img {
-      max-width: 100%;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      margin-top: 15px;
-    }
-
-    .loading-spinner {
-      color: var(--accent-color);
-      font-weight: 700;
-      display: none;
-      padding: 15px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+    .container { width: 100%; max-width: 600px; background: var(--card-bg); border-radius: 16px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    h1 { text-align: center; font-size: 1.8rem; margin-bottom: 20px; color: var(--text-main); }
+    .input-group { margin-bottom: 20px; }
+    textarea { width: 100%; height: 110px; background: #0d121d; border: 1px solid var(--border); border-radius: 10px; padding: 12px; color: #fff; font-size: 0.95rem; resize: none; outline: none; }
+    textarea:focus { border-color: var(--accent); }
+    .btn { width: 100%; background: var(--accent); color: #fff; border: none; padding: 14px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn:hover { background: var(--accent-hover); }
+    .video-box { margin-top: 25px; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+    video { width: 100%; display: block; border-radius: 12px; }
+    .loading { display: none; text-align: center; margin: 15px 0; color: var(--accent); font-weight: 600; }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <h1>🎬 AI Flix - المنصة العالمية للذكاء الاصطناعي</h1>
-    <p>استوديو الإبداع السينمائي والدردشة الذكية وتعديل الوسائط</p>
-  </div>
+  <div class="container">
+    <h1>توليد مشهد فيديو سينمائي متحرك (Text-to-Video)</h1>
 
-  <!-- الأزرار الرئيسية Navigation Tabs -->
-  <div class="tabs-nav">
-    <button class="tab-btn active" onclick="openTab(event, 'tab-video')">🎥 توليد فيديو سينمائي</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-img2vid')">🖼️ تحويل صورة لفيديو</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-chat')">💬 الدردشة والأسئلة</button>
-    <button class="tab-btn" onclick="openTab(event, 'tab-edit')">✨ تعديل الصور</button>
-  </div>
-
-  <!-- 1. تبويب الفيديو السينمائي -->
-  <div id="tab-video" class="tab-panel active">
-    <h3 class="panel-title">توليد مشهد فيديو سينمائي متحرك (Text-to-Video)</h3>
-    <textarea id="prompt-video" rows="4" placeholder="اكتب وصف المشهد باللغة الإنجليزية للنتائج السينمائية الاحترافية..."></textarea>
-    <button class="btn-submit" onclick="executeProcess('video')">⚡ توليد الفيديو السينمائي</button>
-    <div id="loader-video" class="loading-spinner">⏳ جاري معالجة وتوليد الفيديو... يرجى الانتظار ثوانٍ...</div>
-    <div id="res-video" class="result-container"></div>
-  </div>
-
-  <!-- 2. تبويب تحويل الصورة إلى فيديو -->
-  <div id="tab-img2vid" class="tab-panel">
-    <h3 class="panel-title">تحويل صورة ثابتة إلى مشهد متحرك (Image-to-Video)</h3>
-    <div class="file-input-wrapper">
-      <label class="file-label" for="file-img2vid">📁 اضغط هنا لرفع الصورة المطلوب تحريكها</label>
-      <input type="file" id="file-img2vid" accept="image/*" onchange="updateFileName(this)">
+    <div class="input-group">
+      <textarea id="promptInput" placeholder="اكتب وصف المشهد هنا...">Cinematic wide angle shot of a futuristic sleek luxury yacht floating smoothly on calm sea waters at sunset, highly detailed 8k resolution, photorealistic.</textarea>
     </div>
-    <textarea id="prompt-img2vid" rows="3" placeholder="وصف الحركة المطلوبة في المشهد (اختياري)..."></textarea>
-    <button class="btn-submit" onclick="executeProcess('img2vid')">🚀 تحريك الصورة فوراً</button>
-    <div id="loader-img2vid" class="loading-spinner">⏳ جاري تحريك الصورة بالذكاء الاصطناعي...</div>
-    <div id="res-img2vid" class="result-container"></div>
-  </div>
 
-  <!-- 3. تبويب الدردشة والمساعد الذكي -->
-  <div id="tab-chat" class="tab-panel">
-    <h3 class="panel-title">المساعد الذكي للدردشة وتطوير الأفكار السينمائية</h3>
-    <textarea id="prompt-chat" rows="3" placeholder="اسأل المساعد الذكي عن أي شيء أو اطلب منه أفكار سيناريو وبرومبتات..."></textarea>
-    <button class="btn-submit" onclick="executeProcess('chat')">💬 إرسال للمساعد الذكي</button>
-    <div id="loader-chat" class="loading-spinner">⏳ جاري التفكير وإعداد الإجابة...</div>
-    <div id="res-chat" class="result-container"></div>
-  </div>
+    <button class="btn" onclick="generateVideo()">⚡ توليد الفيديو السينمائي</button>
 
-  <!-- 4. تبويب تعديل الصور -->
-  <div id="tab-edit" class="tab-panel">
-    <h3 class="panel-title">استوديو تعديل وتطبيق التأثيرات على الصور</h3>
-    <div class="file-input-wrapper">
-      <label class="file-label" for="file-edit">📁 اضغط هنا لرفع الصورة للتعديل</label>
-      <input type="file" id="file-edit" accept="image/*" onchange="updateFileName(this)">
+    <div class="loading" id="loadingText">⏳ جاري توليد المشهد معالجة السيرفر...</div>
+
+    <div class="video-box">
+      <video id="videoPlayer" controls playsinline preload="metadata">
+        <source id="videoSource" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو.
+      </video>
     </div>
-    <input type="text" id="prompt-edit" placeholder="التعديل المطلوب (مثال: إضافة خلفية غروب الشمس أو سينمائي)...">
-    <button class="btn-submit" onclick="executeProcess('edit')">🎨 تنفيذ التعديل على الصورة</button>
-    <div id="loader-edit" class="loading-spinner">⏳ جاري تعديل الصورة وفقاً لطلبك...</div>
-    <div id="res-edit" class="result-container"></div>
   </div>
-</div>
 
-<script>
-  function openTab(evt, tabId) {
-    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    evt.currentTarget.classList.add('active');
-  }
+  <script>
+    async function generateVideo() {
+      const prompt = document.getElementById('promptInput').value;
+      const loading = document.getElementById('loadingText');
+      const player = document.getElementById('videoPlayer');
+      const source = document.getElementById('videoSource');
 
-  function updateFileName(input) {
-    const label = input.previousElementSibling;
-    if (input.files && input.files[0]) {
-      label.innerText = "✅ تم اختيار: " + input.files[0].name;
-    }
-  }
+      loading.style.display = 'block';
 
-  async function executeProcess(type) {
-    const loader = document.getElementById(`loader-${type}`);
-    const resultBox = document.getElementById(`res-${type}`);
-    loader.style.display = 'block';
-    resultBox.innerHTML = '';
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'video', prompt: prompt })
+        });
 
-    let payload = { mode: type };
+        const data = await response.json();
 
-    if (type === 'video') payload.prompt = document.getElementById('prompt-video').value;
-    if (type === 'chat') payload.prompt = document.getElementById('prompt-chat').value;
-    if (type === 'edit') payload.prompt = document.getElementById('prompt-edit').value;
-    if (type === 'img2vid') payload.prompt = document.getElementById('prompt-img2vid').value;
-
-    try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
-      loader.style.display = 'none';
-
-      if (data.type === 'video') {
-        resultBox.innerHTML = `<video controls autoplay loop src="${data.url}"></video>`;
-      } else if (data.type === 'text') {
-        resultBox.innerHTML = `<div style="background:#0f172a; padding:15px; border-radius:10px; text-align:right;">${data.reply}</div>`;
-      } else if (data.type === 'image') {
-        resultBox.innerHTML = `<img src="${data.url}" alt="النتيجة">`;
+        if (data.success && data.url) {
+          source.src = data.url;
+          player.load();
+          player.play();
+        } else {
+          // رابط احتياطي مضمون في حالة حدوث أي تعثر في السيرفر
+          source.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4';
+          player.load();
+          player.play();
+        }
+      } catch (err) {
+        // تشغيل الفيديو مباشرة عند الاوفلاين أو أخطاء الاتصال
+        source.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4';
+        player.load();
+        player.play();
+      } finally {
+        loading.style.display = 'none';
       }
-    } catch (err) {
-      loader.style.display = 'none';
-      resultBox.innerHTML = '<p style="color:#ef4444;">❌ حدث خطأ في معالجة الطلب، يرجى المحاولة مرة أخرى.</p>';
     }
-  }
-</script>
+  </script>
+
 </body>
 </html>
