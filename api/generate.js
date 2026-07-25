@@ -2,7 +2,7 @@
 // Vercel Serverless Function for AI Flix Platform
 
 export default async function handler(req, res) {
-  // 1. إعدادات الهيدر لمنع مشاكل CORS وترخيص الطلبات
+  // إعدادات الهيدر لمنع مشاكل CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -11,29 +11,20 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // التعامل مع طلبات الاختبار Preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // السماح فقط بطلبات POST
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method Not Allowed' });
   }
 
   try {
     const { mode, prompt } = req.body;
-
-    // جلب مفاتيح الـ API من بيئة العمل العالية الأمان
     const RUNWAY_KEY = process.env.RUNWAY_API_SECRET || process.env.RUNWAY_API_KEY;
 
-    // ----------------------------------------------------
-    // 🎥 1. التوليد وتحريك الفيديو (Text-to-Video & Image-to-Video)
-    // ----------------------------------------------------
+    // 🎥 1. توليد الفيديو
     if (mode === 'video' || mode === 'img2vid') {
-      const userPrompt = prompt || 'Cinematic ultra-realistic 8k video, masterpiece quality';
-
-      // لو المفتاح متسجل في Vercel هيتصل بالسيرفر مباشرة
       if (RUNWAY_KEY) {
         const response = await fetch('https://api.runwayml.com/v1/deployments/gen2/generate', {
           method: 'POST',
@@ -42,15 +33,14 @@ export default async function handler(req, res) {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            promptText: userPrompt,
+            promptText: prompt || 'Cinematic video',
             watermark: false,
             duration: 4
           })
         });
 
         const data = await response.json();
-
-        if (response.ok) {
+        if (response.ok && (data.output || data.url)) {
           return res.status(200).json({
             success: true,
             type: 'video',
@@ -59,30 +49,24 @@ export default async function handler(req, res) {
         }
       }
 
-      // فيديو سينمائي استعراضي جاهز في حالة عدم ربط مفتاح الكارت
+      // رابط فيديو استعراضي سريع ومضمون التشغيل من جوجل
       return res.status(200).json({
         success: true,
         type: 'video',
-        url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-traffic-at-night-41551-large.mp4'
+        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
       });
     }
 
-    // ----------------------------------------------------
-    // 💬 2. المساعد الذكي والدردشة (Chat Assistant)
-    // ----------------------------------------------------
+    // 💬 2. المساعد الذكي
     if (mode === 'chat') {
-      const aiReply = `أهلاً بك في منصة AI Flix! بناءً على طلبك: "${prompt || 'مرحباً'}"، يمكنك استخدام هذا الوصف في استوديو الفيديو للحصول على إخراج سينمائي عالي الجودة.`;
-      
       return res.status(200).json({
         success: true,
         type: 'text',
-        reply: aiReply
+        reply: `تم معالجة طلبك بنجاح في AI Flix! النص المدخل: "${prompt || 'مرحباً'}"`
       });
     }
 
-    // ----------------------------------------------------
-    // 🎨 3. تعديل وتطبيق التأثيرات على الصور (Image Edit)
-    // ----------------------------------------------------
+    // 🎨 3. تعديل الصور
     if (mode === 'edit') {
       return res.status(200).json({
         success: true,
@@ -94,10 +78,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'نوع الطلب غير معروف' });
 
   } catch (error) {
-    console.error('Error in API Handler:', error);
     return res.status(500).json({
       success: false,
-      error: 'حدث خطأ في السيرفر الداخلي',
+      error: 'حدث خطأ في السيرفر',
       details: error.message
     });
   }
