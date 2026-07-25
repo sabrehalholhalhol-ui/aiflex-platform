@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Flix - منصة الذكاء الاصطناعي</title>
+  <title>AI Flix - منصة توليد الفيديو</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-    body { background-color: #0f172a; color: #fff; display: flex; justify-content: center; padding: 20px; }
-    .card { width: 100%; max-width: 500px; background: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; }
-    h2 { text-align: center; margin-bottom: 15px; color: #38bdf8; }
-    textarea { width: 100%; height: 90px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 8px; padding: 10px; }
-    button { width: 100%; margin-top: 15px; padding: 12px; background: #0284c7; color: #fff; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
-    .video-container { margin-top: 20px; border-radius: 10px; overflow: hidden; }
+    body { background-color: #0f172a; color: #fff; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+    .card { width: 100%; max-width: 500px; background: #1e293b; padding: 24px; border-radius: 16px; border: 1px solid #334155; }
+    h2 { text-align: center; margin-bottom: 20px; color: #38bdf8; }
+    textarea { width: 100%; height: 100px; background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 10px; padding: 12px; font-size: 1rem; outline: none; }
+    button { width: 100%; margin-top: 15px; padding: 14px; background: #0284c7; color: #fff; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; }
+    .loading { display: none; text-align: center; margin-top: 15px; color: #38bdf8; font-weight: bold; }
+    .video-container { display: none; margin-top: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #334155; }
     video { width: 100%; display: block; }
   </style>
 </head>
@@ -21,23 +22,40 @@
   <div class="card">
     <h2>🎬 منصة AI Flix لتوليد الفيديو</h2>
     
-    <label>وصف المشهد المطلوب:</label>
-    <textarea id="prompt">مشهد سينمائي لليخت الفاخر وسط البحر عند الغروب، جودة عالية جداً 8k.</textarea>
+    <label style="display:block; margin-bottom:8px;">اكتب وصف المشهد المطلوب:</label>
+    <textarea id="prompt" placeholder="مثال: مشهد سينمائي لليخت الفاخر وسط البحر عند الغروب..."></textarea>
 
-    <button onclick="playDemo()">⚡ تشغيل معاينة المشهد</button>
+    <button onclick="generateVideo()">⚡ توليد المشهد الآن</button>
 
-    <div class="video-container">
+    <div class="loading" id="loader">⏳ جاري الاتصال بالذكاء الاصطناعي وتوليد المشهد...</div>
+
+    <div class="video-container" id="videoBox">
       <video id="player" controls autoplay loop muted playsinline>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        <source id="videoSrc" src="" type="video/mp4">
       </video>
     </div>
   </div>
 
   <script>
-    function playDemo() {
-      const player = document.getElementById('player');
-      player.play();
-      alert("جاري المعالجة... (هنا سيتم ربط الـ API للوليد الحقيقي)");
+    function generateVideo() {
+      const promptText = document.getElementById('prompt').value;
+      if(!promptText) {
+        alert("من فضلك اكتب وصف المشهد أولاً!");
+        return;
+      }
+
+      const loader = document.getElementById('loader');
+      const videoBox = document.getElementById('videoBox');
+      
+      // إظهار تحميل
+      loader.style.display = 'block';
+      videoBox.style.display = 'none';
+
+      // محاكاة طلب التوليد
+      setTimeout(() => {
+        loader.style.display = 'none';
+        alert("تم استلام الطلب بنجاح! يلزم إضافة مفتاح Runway API الخاص بك ليتم استخراج الفيديو المولد مباشرة.");
+      }, 2000);
     }
   </script>
 
